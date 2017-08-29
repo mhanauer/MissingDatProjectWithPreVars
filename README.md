@@ -166,19 +166,20 @@ data = as.data.frame(data)
 
 data = apply(data,2, function(x){ifelse(x == "\"Unsure\"", NA, ifelse(x == "?", NA, ifelse(x == "[Crossed out 8] 10", 10, ifelse(x == "[Crossed out 8] 5 I usually use their name, so I don't make a mistake and offend someone.", 5, ifelse(x == "10 -Had transgender student in class and referred to the student's preferred gender pronouns", 10, ifelse(x == "10 I see no reason why you could object to this as long as you know the preference.", 10, ifelse(x == "2_3", 2.5, ifelse(x ==  "4 My fear is of offending the person by doing something wrong." , 4, ifelse(x=="5_7", 6,ifelse(x == "6 to 10 [wrote \"competent\"]", 8, ifelse(x== "6&7", 6.5, ifelse(x == "8 I'm comfortable using them I'm just horrible @ remembering!!!" , 8, ifelse(x =="N/A 9", 9, ifelse(x == "Using the pronouns to refer to that someone: 9 using the pronouns to refer to myself, or for myself: would depend on what the pronouns were.", NA, ifelse(x == "5_6", 5.5, ifelse(x =="6 I mean, for myself…", 6, ifelse(x == "77", 7, ifelse(x== "6 I mean, for myself…", 6, ifelse(x == "10 [wrote \"& confident\"]", 10, ifelse(x == "9 As long as I know what they are.", 9, ifelse(x =="WOULD NEED TO PRACTICE THIS ONE seemed to go over fast - future maybe give examples more", NA, ifelse(x == "Nuetral ", 4, ifelse(x == "7 9 other issues impede", 8, ifelse(x == "9 other issues impede", 9, ifelse(x == "Pre-Competent", NA, x)))))))))))))))))))))))))})
 data = as.data.frame(data)
+dataPre = data
 dataTest = as.factor(data$PreCompetent)
 levels(dataTest)
+dim(dataPre)
+dataTestGender = data$gender
+head(dataTestGender)
 ```
 
 ```{r}
-dataGender = ifelse(data$gender == "Professor", -9, ifelse(data$gender == "Straight", -9, ifelse(data$gender =="Nb", -9,  data$gender)))
+data = as.data.frame(apply(data, 2, function(x){ifelse(x == "Professor", -9, ifelse(x == "Straight", -9, ifelse(x == "Nb", -9, x)))}))
 
-dataAge = ifelse(data$age == "\"?\"", -9, ifelse(data$age == "\"50+\"", -9,ifelse(data$age == "\"Old\"", -9, ifelse(data$age == "40 and fabulous",-9,ifelse(data$age == "No Pre", -9, ifelse(data$age == "\"60+\"", -9, ifelse(data$age == "\"2\"", -9, ifelse(data$age == "45+", -9, ifelse(data$age == "over 21", -9, ifelse(data$age == "\"30+\"", -9,ifelse(data$age == "\"Guess\"", -9, ifelse(data$age == "Illegible", -9, ifelse(data$age == "range 22-68", -9, ifelse(data$age == "\"4\"", -9, ifelse(data$age == "\"MYOB\"", -9, ifelse(data$age == "\"40ish\"", -9, ifelse(data$age == "\"Ø\"", -9, ifelse(data$age == "50+", -9,data$age))))))))))))))))))
+data = apply(data, 2, function(x){ifelse(x == "\"?\"", -9, ifelse(x == "\"50+\"", -9,ifelse(x == "\"Old\"", -9, ifelse(x == "40 and fabulous",-9,ifelse(x == "No Pre", -9, ifelse(x == "\"60+\"", -9, ifelse(x == "\"2\"", -9, ifelse(x == "45+", -9, ifelse(x == "over 21", -9, ifelse(x == "\"30+\"", -9,ifelse(x == "\"Guess\"", -9, ifelse(x == "Illegible", -9, ifelse(x == "range 22-68", -9, ifelse(x == "\"4\"", -9, ifelse(x == "\"MYOB\"", -9, ifelse(x == "\"40ish\"", -9, ifelse(x == "\"Ø\"", -9, ifelse(x == "50+", -9, ifelse(x =="\"?\"", -9, ifelse(x == "\"Ø\"", -9, x))))))))))))))))))))})
+data = as.data.frame(data)
 
-
-dataEth = ifelse(data$eth == "\"?\"", -9, ifelse(data$eth == "\"Ø\"" , -9, data$eth))
-ethLevels = as.factor(dataEth)
-levels(ethLevels)
 #levels(ethLevels)
 ```
 
@@ -186,12 +187,8 @@ Here is where I first recode all possible missing values into a "Missing" code a
 
 For example, I believe that "Flank" is actually "Blank", which is one of the codes the Prism students to code missing values.  Therefore, I am recoding the "Flank" code to "Missing".  Let me know what you think about these codes.
 ```{r}
-data = as.data.frame(data)
-data$PreCompetent
-colnames(data1) = c("gender", "age", "sexorien", "eth", "site", "PreCompetent", "PreConfident", "PreComfort")
 
-head(data1)
-data1 =apply(data1, 2, function(x) {ifelse(x == "NA", "Missing", ifelse(x == -9, NA, ifelse(x == "Blank", "Missing", ifelse( x == "N/A", "Missing", ifelse(x == "Flank", "Missing",ifelse(x == "MIssing", "Missing", ifelse(x == "[Crossed something out]", "Missing", ifelse(x == "I'd need to know you better to share that =)", NA, ifelse(x =="[Crossed something out]", NA, x )))))))))})
+data1 =apply(data, 2, function(x) {ifelse(x == "NA", "Missing", ifelse(x == -9, NA, ifelse(x == "Blank", "Missing", ifelse( x == "N/A", "Missing", ifelse(x == "Flank", "Missing",ifelse(x == "MIssing", "Missing", ifelse(x == "[Crossed something out]", "Missing", ifelse(x == "I'd need to know you better to share that =)", NA, ifelse(x =="[Crossed something out]", NA, x )))))))))})
 
 data1 = as.data.frame(data1)
 head(data1)
@@ -199,6 +196,7 @@ data1 = na.omit(data1)
 sum(is.na(data1))
 data1 = as.data.frame(data1)
 dim(data1)
+head(data1)
 ```
 Here I created a female variable, other gender identity variable (otherGI), and a straight variable.  
 
@@ -236,6 +234,8 @@ levels(genderCount)
 # My criteria is if they use more than one way to describe themselves
 Prog = ifelse(genderCount == "\"Female-->sex, androgyne/butch, top/bottom\"", 1, ifelse(genderCount == "\"Hetero-Male\"", 1, ifelse(genderCount == "Cis Female", 1, ifelse(genderCount == "Cis Woman" , 1, ifelse(genderCount == "Cis-man", 1, ifelse(genderCount == "Female (cis)", 1, ifelse(genderCount == "Female, Cis-gender", 1, ifelse(genderCount == "Female/she", 1, ifelse(genderCount == "She, her, hers Female", 1, ifelse(genderCount == "Woman (she/her)" , 1, ifelse(genderCount == "Man/Male", 1, ifelse(genderCount == "\"Female--cisgender\"", 1, ifelse(genderCount == "Cis woman", 1, ifelse(genderCount == "Cis-Male" , 1, ifelse(genderCount == "Cismale", 1, ifelse(genderCount == "Female (Cisgender)" , 1, ifelse(genderCount == "Female Cis", 1, ifelse(genderCount == "Female/masculine" , 1, ifelse(genderCount == "He/him", 1, ifelse(genderCount == "Man/goes by he/him", 1, 0))))))))))))))))))))
 head(Prog)
+sum(Prog)
+
 ```
 
 Now I am doing the same for the ethnicity variable and creating the following categories: black, hispanic, multi (i.e. multiracial), and other ethnicity (otherEth).  Therefore, white is the reference category.
@@ -245,7 +245,8 @@ levels(ethLevels)
 
 black = ifelse(data1$eth == "Af. Am.", 1, ifelse(data1$eth == "African American", 1, ifelse(data$eth == "African-American", 1, ifelse(data1$eth == "Africian American", 1, ifelse(data1$eth == "black", 1, ifelse(data1$eth == "Black - African American", 1, ifelse(data1$eth == "Black/African American", 1, ifelse(data1$eth == "AA", 1, ifelse(data1$eth ==  "African American Black" , 1, ifelse(data1$eth == "Blacc", 1, ifelse(data1$eth == "Black", 1, ifelse(data1$eth == "Missing", "Missing",0))))))))))))
 
-hispanic =  ifelse(data1$eth ==   "hispanic", 1, ifelse(data1$eth == "H", 1, ifelse(data1$eth == "Hispanic" , 1, ifelse(data1$eth == "Hispanic/Latina", 1, ifelse(data1$eth == "Latina", 1, ifelse(data1$eth == "Latino/Hispanic", 1, ifelse(data1$eth == "Latino", 1, 0)))))))                                                 
+
+hispanic =  ifelse(data1$eth ==   "hispanic", 1, ifelse(data1$eth == "H", 1, ifelse(data1$eth == "Hispanic" , 1, ifelse(data1$eth == "Hispanic/Latina", 1, ifelse(data1$eth == "Latina", 1, ifelse(data1$eth == "Latino/Hispanic", 1, ifelse(data1$eth == "Latino", 1, 0)))))))  
 
 multi = ifelse(data1$eth == "hispanic/white", 1, ifelse(data1$eth == "many", 1, ifelse(data1$eth == "Mixed", 1, ifelse(data1$eth == "White & Latinx", 1, ifelse(data1$eth == "\"M\"" , 1, ifelse(data1$eth ==  "African, Irish, American", 1, ifelse(data1$eth == "black + other", 1, ifelse(data1$eth == "Caucasian/Hispanic", 1, ifelse(data1$eth == "m", 1, ifelse(data1$eth == "Many",1, ifelse(data1$eth == "Mix", 1, ifelse(data1$eth == "Mixed white/South Asian", 1, ifelse(data1$eth == "Multiethnic Afrolatina + white", 1, ifelse(data1$eth == "Multiracial" , 1, ifelse(data1$eth ==  "White/mixed", 1,0))))))))))))))) 
 
@@ -266,7 +267,7 @@ colnames(missingSexOrien) = c("missingSexOrien")
 dim(missingSexOrien)
 
 
-dataAnalysis = cbind(missingSexOrien, data1SexOrien, Prog, female, otherGI, black, hispanic, multi, otherEth, age = data1$age, site = data1$site, data1$Pre.Competent,	data1$Pre.Confident,	data1$Pre.Comfort)
+dataAnalysis = cbind(missingSexOrien, data1SexOrien, Prog, female, otherGI, black, hispanic, multi, otherEth, age = data1$age, site = data1$site, PreCompetent = data1$PreCompetent,PreConfident = 	data1$PreConfident,	PreComfort = data1$PreComfort)
 
 dataAnalysis = as.data.frame(dataAnalysis)
 head(dataAnalysis)
@@ -282,14 +283,18 @@ write.csv(dataAnalysis, "dataAnalysis.csv", row.names = FALSE)
 Here I have an example of the model with missing values found in the sexual orientation variable indicated as a 1 for missing and 0 for non-missing.  Then I include the other covariates in the model and allow the model to have different intercepts for different sites, which are the locations that each program took place at.
 
 Overall, none of the included covariates are statistically significantly related to missing values in sexual orientation.
-```{r}
-library(nlme)
-library(lme4)
-model = glmer(missingSexOrien ~ female +data1SexOrien + otherGI + black + hispanic + multi + otherEth +(1 | site), family = binomial("logit"), data = dataAnalysis)
-summary(model)
 
+There were no other gender identity because there are no cases
+Needed to change the numeric values to numeric, because they were seen as factors
+```{r}
 library(Zelig)
-z.out1 <- zelig(missingSexOrien ~ female +data1SexOrien +Prog + otherGI + black + hispanic + multi + otherEth + site, model = "logit", data = dataAnalysis, cite = FALSE)
+ageNum = as.numeric(dataAnalysis$age)
+PreCompetentNum = as.numeric(dataAnalysis$PreCompetent)
+PreConfidentNum =as.numeric(dataAnalysis$PreConfident)
+PreComfortNum = as.numeric(dataAnalysis$PreComfort)
+head(dataAnalysis)
+dataAnalysis = cbind(dataAnalysis, ageNum, PreCompetentNum, PreConfidentNum, PreComfortNum)
+z.out1 <- zelig(missingSexOrien ~ female +data1SexOrien + ageNum +Prog + black + hispanic + multi + otherEth + site + PreCompetentNum + PreConfidentNum +PreComfortNum, model = "logit", data = dataAnalysis, cite = FALSE)
 summary(z.out1)
 
 .05/27
